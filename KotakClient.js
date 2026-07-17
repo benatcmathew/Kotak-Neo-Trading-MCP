@@ -24,12 +24,12 @@ class KotakClient {
     }
 
     async totp_login(mobile_number, ucc, totp, consumer_key) {
-        // Strip any accidental 'Bearer ' prefix if passed from user, so we manage it cleanly
+        // Strip any accidental 'Bearer ' prefix if passed from user
         this.consumer_key = consumer_key.replace(/^Bearer\s+/i, ''); 
         
-        const url = `https://gw-napi.kotaksecurities.com/login/1.0/login/v6/totp/login`;
+        const url = `https://mis.kotaksecurities.com/login/1.0/tradeApiLogin`;
         const headers = {
-            'Authorization': `Bearer ${this.consumer_key}`,
+            'Authorization': this.consumer_key,
             'neo-fin-key': this.neo_fin_key,
             'Content-Type': 'application/json'
         };
@@ -53,11 +53,12 @@ class KotakClient {
     }
 
     async totp_validate(mpin) {
-        const url = `https://gw-napi.kotaksecurities.com/login/1.0/login/v6/totp/validate`;
+        const url = `https://mis.kotaksecurities.com/login/1.0/tradeApiValidate`;
         const headers = {
-            'Authorization': `Bearer ${this.view_token}`,
-            'sid': this.view_sid,
+            'Authorization': this.consumer_key,
             'neo-fin-key': this.neo_fin_key,
+            'sid': this.view_sid,
+            'Auth': this.view_token,
             'Content-Type': 'application/json'
         };
         const body = { mpin: mpin };
