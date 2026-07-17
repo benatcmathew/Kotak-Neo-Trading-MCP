@@ -14,7 +14,7 @@
     "@modelcontextprotocol/sdk": "^1.29.0",
     "axios": "^1.18.1",
     "dotenv": "^17.4.2",
-    "otplib": "^13.4.1",
+    "otpauth": "^9.5.1",
     "papaparse": "^5.5.4"
   }
 }

@@ -3,7 +3,7 @@
 const { Server } = require("@modelcontextprotocol/sdk/server/index.js");
 const { StdioServerTransport } = require("@modelcontextprotocol/sdk/server/stdio.js");
 const { CallToolRequestSchema, ListToolsRequestSchema } = require("@modelcontextprotocol/sdk/types.js");
-const { authenticator } = require('otplib');
+const OTPAuth = require('otpauth');
 
 const KotakClient = require('./KotakClient');
 const { vaultExists, loadCredentials, deleteVault, interactiveSetup } = require('./SecureVault');
@@ -169,7 +169,13 @@ function startMCPServer() {
                     const creds = loadCredentials(master_password);
                     
                     // Generate live TOTP token from saved Base32 Secret
-                    const live_totp = authenticator.generate(creds.totp_key);
+                    const totpAuth = new OTPAuth.TOTP({
+                        algorithm: 'SHA1',
+                        digits: 6,
+                        period: 30,
+                        secret: OTPAuth.Secret.fromBase32(creds.totp_key.replace(/\s+/g, ''))
+                    });
+                    const live_totp = totpAuth.generate();
 
                     const loginRes = await client.totp_login(creds.mobile_number, creds.ucc, live_totp, creds.consumer_key);
                     if (loginRes.status === 'error') {
