@@ -94,19 +94,25 @@ function askQuestion(query, hidden = false) {
 
     return new Promise(resolve => {
         if (hidden) {
-            let muted = true;
-            rl.stdoutMuted = true;
-            process.stdout.write(query);
-            rl.question('', (answer) => {
+            rl.question(query, (answer) => {
                 rl.close();
                 console.log();
                 resolve(answer);
             });
             rl._writeToOutput = function _writeToOutput(stringToWrite) {
-                if (rl.stdoutMuted)
-                    rl.output.write("*");
-                else
+                // If the string contains the query itself, we let it print
+                if (stringToWrite.includes(query)) {
                     rl.output.write(stringToWrite);
+                } 
+                // Don't mask newlines
+                else if (['\r\n', '\n', '\r'].includes(stringToWrite)) {
+                    rl.output.write(stringToWrite);
+                } 
+                // Mask typed characters
+                else {
+                    // rl.output.write('*'); // can uncomment to show stars, or leave empty for total silence
+                    rl.output.write('*');
+                }
             };
         } else {
             rl.question(query, answer => {
