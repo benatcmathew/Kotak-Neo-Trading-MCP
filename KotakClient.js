@@ -27,6 +27,12 @@ class KotakClient {
         // Strip any accidental 'Bearer ' prefix if passed from user
         this.consumer_key = consumer_key.replace(/^Bearer\s+/i, ''); 
         
+        // Ensure mobile number has +91
+        let formatted_mobile = mobile_number.trim();
+        if (!formatted_mobile.startsWith('+91')) {
+            formatted_mobile = '+91' + formatted_mobile.replace(/^0+/, '');
+        }
+        
         const url = `https://mis.kotaksecurities.com/login/1.0/tradeApiLogin`;
         const headers = {
             'Authorization': this.consumer_key,
@@ -34,7 +40,7 @@ class KotakClient {
             'Content-Type': 'application/json'
         };
         const body = {
-            mobileNumber: mobile_number,
+            mobileNumber: formatted_mobile,
             ucc: ucc,
             totp: totp
         };
