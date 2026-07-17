@@ -1,0 +1,20 @@
+{
+  "name": "kotak-neo-mcp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "axios": "^1.18.1",
+    "dotenv": "^17.4.2",
+    "otplib": "^13.4.1",
+    "papaparse": "^5.5.4"
+  }
+}
